@@ -39,12 +39,13 @@
   const inputSynonym = "#edit-path-alias";
   const dateInput = "#edit-date";
 
+  const senFormdButton = "#edit-submit";
+
   function init() {
     console.log("run");
     const checkAndInit = () => {
       overlayIFrame = document.querySelector(".overlay-active");
       if (overlayIFrame) {
-        console.log(overlayIFrame);
         const getTitleContainer =
           overlayIFrame.contentWindow.document.querySelector(
             ".form-item-title"
@@ -53,7 +54,6 @@
           getTitleContainer.style.display = "flex";
           getTitleContainer.style.flexDirection = "column";
           getTitleContainer.style.gap = "5px";
-          console.log(getTitleContainer);
           clearInterval(interval);
           const pushButton = document.createElement("button");
           const sendButton = document.createElement("button");
@@ -66,6 +66,12 @@
           pushButton.addEventListener("click", (e) => {
             e.preventDefault();
             fillAndParse();
+          });
+
+          sendButton.addEventListener("click", (e) => {
+            e.preventDefault();
+            const findSendButton = findInOverlay(senFormdButton);
+            findSendButton.click();
           });
           getTitleContainer.append(h3, textArea, pushButton, sendButton);
         }
@@ -122,9 +128,7 @@
     sourceBtn.click();
 
     const textareaWrapper = findInOverlay(sourceTextareaWrapper);
-    console.log(textareaWrapper);
     const textarea = textareaWrapper.children[0];
-    console.log(textarea);
     textarea.value = parsedData.annoucment;
     sourceBtn.click();
   }
@@ -134,9 +138,9 @@
     linksSourceBtn.click();
 
     const linksWrap = findInOverlay(linksWrapper);
-    console.log(linksWrap);
 
-    linksWrap.children[0].value = parsedData.links;
+    const updatedLinks = replaceLinks(parsedData.links);
+    linksWrap.children[0].value = updatedLinks;
   }
 
   function fillMenu() {
@@ -160,7 +164,6 @@
         selectElement.dispatchEvent(new Event("change"));
       }
     }
-    console.log(findParentOption);
 
     const selectWeight = menuWrapper.querySelector(menuWeightSelect);
     const optionsWeight = selectWeight.querySelectorAll("option");
@@ -199,5 +202,14 @@
   function parseTextArea() {
     parsedData = JSON.parse(textArea.value);
     console.log(parsedData);
+  }
+
+  function replaceLinks(links) {
+    const updatedLinks = links.replace(
+      /href="http:\/\/www.kbpravda.ru\/(\d{4})\/(\d{2})\/(\d{2})\.pdf/g,
+      'href="/arhiv/$1/kbp/$2/$3.pdf'
+    );
+
+    return updatedLinks;
   }
 })();
