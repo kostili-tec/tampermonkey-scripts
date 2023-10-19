@@ -147,6 +147,11 @@
     const { parent, weight } = parsedData.menuProps;
     const menuWrapper = findInOverlay(editMenu);
 
+    const replacedParent = parent
+      .toLowerCase()
+      .replace(/^[-\s]+/, "")
+      .replace(/[-\s]+$/, "");
+
     const menuInput = menuWrapper.querySelector(linkMenuInput);
     menuInput.click();
 
@@ -154,9 +159,13 @@
 
     const optionsParent = selectParrent.querySelectorAll("option");
 
-    const findParentOption = Array.from(optionsParent).find((option) =>
-      option.textContent.toLowerCase().includes(parent.toLowerCase())
-    );
+    const findParentOption = Array.from(optionsParent).find((option) => {
+      const replacedOption = option.textContent
+        .replace(/^[-\s]+/, "")
+        .replace(/[-\s]+$/, "")
+        .toLowerCase();
+      return replacedOption.includes(replacedParent);
+    });
     if (findParentOption) {
       findParentOption.selected = true;
       const selectElement = findParentOption.parentElement;
