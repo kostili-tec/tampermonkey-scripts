@@ -5,6 +5,7 @@
 // @description  try to take over the world!
 // @author       You
 // @match        https://smikbr.ru/kbp*
+// @match        http://smikbr.ru/kbp*
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // @run-at document-end
 // @grant        none
@@ -111,10 +112,10 @@
     );
     allWrapperCheckboxes.forEach((parent) => {
       const [input, label] = parent.children;
-      if (label.textContent == firstCheck) {
+      if (label.textContent.toLowerCase().includes(firstCheck.toLowerCase())) {
         input.checked = true;
       }
-      if (label.textContent == secondCheck) {
+      if (label.textContent.toLowerCase().includes(secondCheck.toLowerCase())) {
         input.checked = true;
       }
     });
